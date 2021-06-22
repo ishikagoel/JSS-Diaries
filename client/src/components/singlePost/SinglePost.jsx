@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useLocation, Link } from "react-router-dom"
+import { useLocation, Link } from "react-router-dom";
 import "./singlePost.css"
 
 export default function SinglePost() {
