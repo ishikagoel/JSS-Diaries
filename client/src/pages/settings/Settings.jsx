@@ -82,6 +82,7 @@ export default function Settings() {
                     <input
                         type="password"
                         onChange={(e) => setPassword(e.target.value)}
+                        required
                     />
                     <button className="settingsSubmit" type="submit">
                         Update
