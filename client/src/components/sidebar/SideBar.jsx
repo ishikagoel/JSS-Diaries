@@ -18,11 +18,11 @@ export default function SideBar() {
             <div className="sidebarItem">
                 <span className="sidebarTitle">ABOUT ME</span>
                 <img
-                    src="https://images.unsplash.com/photo-1593643946890-b5b85ade6451?ixid=MnwxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHw2fHx8ZW58MHx8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=60"
+                    src="https://cdn.pixabay.com/photo/2016/04/17/20/19/woman-1335487_960_720.jpg"
                     alt=""
                 />
                 <p>
-                    Lorem Ipsum Lorem Ipsum is simply dummy text of the printing and typesetting industry Lorem Ipsum has been the industry's standard dummy text ever since the 1500s when an unknown printer took a galley of type and scrambled it.
+                    Have an artist you admire read your final draft. A fresh set of practiced eyes can do wonders and help you polish it to perfection. Another reader with a trained eye will be able to tell you if your art correctly reflects you or not.
                 </p>
             </div>
             <div className="sidebarItem">

@@ -2,7 +2,8 @@
   flex: 3;
   height: fit-content;
   margin: 20px;
-  padding-bottom: 30px;
+  padding: 20px;
+  padding-bottom: 60px;
   background-color: #fdfbfb;
   border-radius: 10px;
   display: flex;
@@ -33,11 +34,12 @@
 .sidebarItem > img {
   margin-top: 15px;
   width: 250px;
-  height: 250px;
+  /* height: 250px; */
 }
 
 .sidebarItem > p {
   padding: 30px;
+  text-align: justify;
 }
 
 .sidebarList {
