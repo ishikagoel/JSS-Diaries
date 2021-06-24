@@ -1,30 +1,107 @@
-import "./singlePost.css"
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
+import { useLocation } from "react-router";
+import { Link } from "react-router-dom";
+import { Context } from "../../context/Context";
+import "./singlePost.css";
 
 export default function SinglePost() {
+    const location = useLocation();
+    const path = location.pathname.split("/")[2];
+    const [post, setPost] = useState({});
+    const PF = "http://localhost:5000/images/";
+    const { user } = useContext(Context);
+    const [title, setTitle] = useState("");
+    const [desc, setDesc] = useState("");
+    const [updateMode, setUpdateMode] = useState(false);
+
+    useEffect(() => {
+        const getPost = async () => {
+            const res = await axios.get("/posts/" + path);
+            setPost(res.data);
+            setTitle(res.data.title);
+            setDesc(res.data.desc);
+        };
+        getPost();
+    }, [path]);
+
+    const handleDelete = async () => {
+        try {
+            await axios.delete(`/posts/${post._id}`, {
+                data: { username: user.username },
+            });
+            window.location.replace("/");
+        } catch (err) { }
+    };
+
+    const handleUpdate = async () => {
+        try {
+            await axios.put(`/posts/${post._id}`, {
+                username: user.username,
+                title,
+                desc,
+            });
+            setUpdateMode(false)
+        } catch (err) { }
+    };
+
     return (
         <div className="singlePost">
             <div className="singlePostWrapper">
-                <img
-                    className="singlePostImg"
-                    src="https://images.unsplash.com/photo-1606787947360-4181fe0ab58c?ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80"
-                    alt=""
-                />
-                <h1 className="singlePostTitle">
-                    We welcome you to the intellectual battle.
-                    <div className="singlePostEdit">
-                        <i className="singlePostIcon far fa-edit"></i>
-                        <i className="singlePostIcon far fa-trash-alt"></i>
-                    </div>
-                </h1>
+                {post.photo && (
+                    <img src={PF + post.photo} alt="" className="singlePostImg" />
+                )}
+                {updateMode ? (
+                    <input
+                        type="text"
+                        value={title}
+                        className="singlePostTitleInput"
+                        autoFocus
+                        onChange={(e) => setTitle(e.target.value)}
+                    />
+                ) : (
+                    <h1 className="singlePostTitle">
+                        {title}
+                        {post.username === user?.username && (
+                            <div className="singlePostEdit">
+                                <i
+                                    className="singlePostIcon far fa-edit"
+                                    onClick={() => setUpdateMode(true)}
+                                ></i>
+                                <i
+                                    className="singlePostIcon far fa-trash-alt"
+                                    onClick={handleDelete}
+                                ></i>
+                            </div>
+                        )}
+                    </h1>
+                )}
                 <div className="singlePostInfo">
-                    <span className="singlePostAuthor">Author: <b>Safak</b></span>
-                    <span className="singlePostDate">1 hour ago</span>
+                    <span className="singlePostAuthor">
+                        Author:
+                        <Link to={`/?user=${post.username}`} className="link">
+                            <b> {post.username}</b>
+                        </Link>
+                    </span>
+                    <span className="singlePostDate">
+                        {new Date(post.createdAt).toDateString()}
+                    </span>
                 </div>
-                <p className="singlePostDesc">
-                    A blog (a truncation of "weblog")[1] is a discussion or informational website published on the World Wide Web consisting of discrete, often informal diary-style text entries (posts). Posts are typically displayed in reverse chronological order, so that the most recent post appears first, at the top of the web page. Until 2009, blogs were usually the work of a single individual,[citation needed] occasionally of a small group, and often covered a single subject or topic. In the 2010s, "multi-author blogs" (MABs) emerged, featuring the writing of multiple authors and sometimes professionally edited. MABs from newspapers, other media outlets, universities, think tanks, advocacy groups, and similar institutions account for an increasing quantity of blog traffic. The rise of Twitter and other "microblogging" systems helps integrate MABs and single-author blogs into the news media. Blog can also be used as a verb, meaning to maintain or add content to a blog.
-                    The emergence and growth of blogs in the late 1990s coincided with the advent of web publishing tools that facilitated the posting of content by non-technical users who did not have much experience with HTML or computer programming. Previously, a knowledge of such technologies as HTML and File Transfer Protocol had been required to publish content on the Web, and early Web users therefore tended to be hackers and computer enthusiasts
-                </p>
+                {updateMode ? (
+                    <textarea
+                        className="singlePostDescInput"
+                        value={desc}
+                        onChange={(e) => setDesc(e.target.value)}
+                    />
+                ) : (
+                    <p className="singlePostDesc">{desc}</p>
+                )}
+                {updateMode && (
+                    <button className="singlePostButton" onClick={handleUpdate}>
+                        Update
+                    </button>
+                )}
             </div>
         </div>
-    )
+    );
 }
